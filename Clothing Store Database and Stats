@@ -1,0 +1,18 @@
+#created a table for my store inventoy 
+CREATE TABLE store (id INTEGER PRIMARY KEY, clothing TEXT, quantity INTEGER, cost INTEGER, price INTEGER);
+
+#created the values (i.e., what my store has)
+INSERT INTO store VALUES (1, "shirt", 10, 20, 30);
+INSERT INTO store VALUES (2, "pants", 16, 30, 50); 
+INSERT INTO store VALUES (3, "skirt", 7, 16, 20); 
+INSERT INTO store VALUES (4, "jacket", 21, 35, 60); 
+INSERT INTO store VALUES (5, "cardigan", 9, 20, 40);
+
+#drew the data from my store to see the actual table it creates
+SELECT * FROM store; 
+
+#drew the clothing items that cost less than 30 to produce (to see which ones are cheapest to make) 
+SELECT * FROM store WHERE cost < 30 ORDER BY cost; 
+
+#looked at the revenue of each product
+SELECT (price*quantity) FROM store;
