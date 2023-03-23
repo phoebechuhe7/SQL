@@ -1,2 +1,18 @@
 # I used SQL to aggregate data using multiple joins to select relevant users from a database and group them by activity.
 
+# Use *IN* operator to check whether a value is in a list 
+# e.g., selecting the biking and running from the types of exercise list
+SELECT * FROM exercise WHERE type IN ("biking", "running"); 
+# e.g., selecting everyone BUT biking and running from the types of exercise list
+SELECT * FROM exercise WHERE type NOT IN ("biking", "running");
+
+# Select from a table based on information from another table; the query inside the other is called a subquery
+# This allows the outer query to stay up to date based on the subquery (should the subquery change values)
+# e.g., selecting the exercises recommended by doctors 
+SELECT * FROM exercise WHERE type IN (
+SELECT type FROM drs_favorites); 
+
+# *LIKE* operator allows for inexact matches; e.g., "increases cardiovascular health." vs "increases cardiovascular health"
+# e.g., selecting exercises that docs recommend for improving cardiovascular health 
+SELECT * FROM exercise WHERE type IN (
+SELECT type FROM drs_favorites WHERE reason LIKE "%cardiovascular%"); 
