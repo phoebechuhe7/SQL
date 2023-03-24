@@ -16,3 +16,8 @@ SELECT type FROM drs_favorites);
 # e.g., selecting exercises that docs recommend for improving cardiovascular health 
 SELECT * FROM exercise WHERE type IN (
 SELECT type FROM drs_favorites WHERE reason LIKE "%cardiovascular%"); 
+
+# Use *HAVING* operator to filter out result based on aggregate functions (e.g. MIN(), MAX(),AVG(), and COUNT())
+# SELECT … FROM … GROUP BY … HAVING …;
+# e.g., selecting author based on the sum of all the words they've written so long as they wrote over a million
+SELECT author, SUM(words) AS total_words FROM books GROUP BY author HAVING total_words > 1000000
