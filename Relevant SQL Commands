@@ -33,3 +33,14 @@ SELECT type, heart_rate,
     END as "heart_rate_zone" 
 FROM exercise_longs
 GROUP BY heart_rate_zone; 
+
+
+# Relational query: Select data from multiple tables at once by using a JOIN. 
+#In all SQL joins, the LEFT table is the one that comes after FROM in your SQL code, and the RIGHT table is the one that comes after JOIN.
+# LEFT JOIN is used when you want ALL the information from Table 1, and only the records in Table 2 that have something in common with Table 1
+# RIGHT JOIN is just like LEFT JOIN, but the other way around. It's used when you want ALL the information from Table 2, and only the records in Table 1 that have something in common with Table 2.
+# INNER JOIN is used when you only want information that has values in both tables
+# FULL OUTER JOIN returns everything from both tables, whether there is a match between them or not.
+
+
+
