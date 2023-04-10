@@ -67,3 +67,33 @@ AND length(orderID) = 6
 AND orderID <> "Order ID" 
 GROUP BY Location
 HAVING count(orderID) > 2
+
+## Selecting the amount of each headphone product sold in February 
+SELECT Product, sum(Quantity) 
+FROM BIT_DB.FebSales
+WHERE Product LIKE "%Headphones%" 
+GROUP BY Product
+
+## Finding the average amount spent per account in February
+SELECT avg(Quantity*Price)
+FROM BIT_DB.FebSales
+LEFT JOIN BIT_DB.customers
+ON customers.order_id = FebSales.orderID
+WHERE length(orderid) = 6
+AND orderid <> "Order ID"; 
+
+## Finding the average quantity of products purchased per account in February
+SELECT avg(Quantity)
+FROM BIT_DB.FebSales
+LEFT JOIN BIT_DB.customers
+ON customers.order_id = FebSales.orderID
+WHERE length(orderid) = 6
+AND orderid <> "Order ID"; 
+
+
+## Finding the product that brought in the most revenue in January 
+SELECT Product,sum(Quantity*Price)
+FROM BIT_DB.JanSales
+GROUP BY Product
+ORDER BY sum(Quantity*Price) DESC
+LIMIT 1
