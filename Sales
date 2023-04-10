@@ -1,3 +1,6 @@
+## In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
+
+
 ## The number of orders placed in January 
 SELECT count(orderID) 
 FROM Bit_DB.JanSales 
