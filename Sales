@@ -53,8 +53,17 @@ WHERE FebSales.Quantity > 2
 AND length(orderid) = 6 
 AND orderid <> 'Order ID'
 
-# Selecting all products and how much each were bought by customers living in the Los Angeles area
+## Selecting all products and how much of each product was bought by customers living in the Los Angeles area
 SELECT Product, SUM(quantity) 
 FROM BIT_DB.FebSales
 WHERE location LIKE "%Los Angeles%"
 GROUP BY Product
+
+## Selecting the locations in New York that received at least 3 orders in January, and how many orders each received.
+SELECT Location, count(orderID) 
+FROM BIT_DB.JanSales
+WHERE Location LIKE "%New York%" 
+AND length(orderID) = 6 
+AND orderID <> "Order ID" 
+GROUP BY Location
+HAVING count(orderID) > 2
