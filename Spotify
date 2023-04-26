@@ -34,3 +34,12 @@ WHERE popularity > 80
 AND energy > .5
 ORDER BY id
 
+
+-- Select the three artists and the number of songs they each had in the list of top 50 songs on Spotify 
+SELECT artist_name, count(artist_name)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY count(artist_name) DESC
+LIMIT 3
+
+
