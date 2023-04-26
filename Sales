@@ -120,3 +120,19 @@ LEFT JOIN BIT_DB.customers
 ON customers.order_id = FebSales.orderID
 WHERE length(orderid) = 6 
 AND orderid <> "Order ID";
+
+-- What was the average quantity of products purchased per account in February?
+SELECT sum(quantity)/count(orderID) 
+FROM BIT_DB.FebSales
+LEFT JOIN BIT_DB.customers
+ON customers.order_id = FebSales.orderID
+WHERE length(orderid) = 6 
+AND orderid <> "Order ID";
+
+
+-- Which product brought in the most revenue in January and how much revenue did it bring in total?
+SELECT product, sum(Quantity*price) AS revenue
+FROM BIT_DB.JanSales
+GROUP BY product 
+ORDER BY sum(Quantity*price) DESC
+LIMIT 1;
