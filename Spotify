@@ -43,3 +43,17 @@ ORDER BY count(artist_name) DESC
 LIMIT 3
 
 
+-- Using a CTE to calculate who the "Top Stars" are in the data (i.e., those who obtained an average popularity rating of 90 or more)
+WITH popularity_average_CTE AS 
+    (SELECT s.artist_name,
+    AVG(s.popularity) AS average_popularity
+    FROM SpotifyData s 
+    GROUP BY s.artist_name
+    )
+
+SELECT artist_name, 
+    average_popularity, 
+    "Top Star" as tag 
+FROM popularity_average_CTE 
+WHERE average_popularity >= 90;
+
