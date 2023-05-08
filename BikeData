@@ -80,16 +80,26 @@ LIMIT 10;
 SELECT *
 FROM CityBikeLanes WHERE street = "Walnut";
 
-
 WITH safe_bikes AS (
     SELECT street,
     AVG(b.safetyrating) AS average_safetyrating 
     FROM CityBikeLanes b
     GROUP BY street
     )
-    
 SELECT street, 
     average_safetyrating,
     "Safe Lane" as label
 FROM safe_bikes 
 WHERE average_safetyrating >=4;
+
+-- (Using window functions) Recommending which streets to be improved, removed, or left as in based on average safety rating.
+SELECT street, safetyrating,
+AVG(safetyrating) OVER (PARTITION BY street) as "Average_safety_rating",
+CASE
+    WHEN AVG(safetyrating) OVER(PARTITION BY street) >= 4 THEN  "Leave As-Is"
+    WHEN AVG(safetyrating) OVER(PARTITION BY street) < 2.5 THEN "Remove"
+    ELSE "Improvements Needed"
+    END AS "Recommendation"
+FROM CityBikeLanes
+ 
+
