@@ -1,0 +1,20 @@
+-- 1. Show customers only from the USA
+
+-- 2. Determine which employees are sales agents
+
+-- 3. How many distnact billing countries are there from Invoice table? 
+
+-- 4. What were the total sales from 2009?
+
+-- 5. Show total sales made by each sales agent 
+
+-- 6. Show the invoices associated with each sales agent
+
+-- 7. Which sales agent made the most in 2009? 
+
+-- 8. Which customer spent the most in 2009? 
+
+-- 9. What was the average money spent by customers in 2009? 
+
+-- 10. Which track was sold the most? 
+	
