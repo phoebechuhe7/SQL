@@ -1,0 +1,76 @@
+## Creating a table of famous people and their basic demographic details. Inserted data entries into the table.
+
+CREATE TABLE famous_people (id INTEGER PRIMARY KEY, fullname TEXT, race TEXT, age INTEGER); 
+
+INSERT INTO famous_people (fullname, race, age) VALUES ("Taylor Swift", "White", 33);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Selena Gomez", "Hispanic", 30);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Michael B Jordan", "Black", 36);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Michelle Yeoh", "Asian", 60);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Simu Liu", "Asian", 34);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Phoebe Bridgers", "White", 28);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Bad Bunny", "Hispanic", 29);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Maluma", "Hispanic", 29);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Will Smith", "Black", 54);
+INSERT INTO famous_people (fullname, race, age) VALUES ("SZA", "Black", 33);
+INSERT INTO famous_people (fullname, race, age) VALUES ("Shakira", "Hispanic", 46);
+
+
+## Created a table of famous people and their hobbies. Inserted data entries into the table. 
+
+CREATE TABLE hobbies (id INTEGER PRIMARY KEY, person_id TEXT, name TEXT); 
+
+INSERT INTO hobbies (person, name) VALUES ("1", "Singing");
+INSERT INTO hobbies (person, name) VALUES ("2", "Acting");
+INSERT INTO hobbies (person, name) VALUES ("2", "Singing");
+INSERT INTO hobbies (person, name) VALUES ("3", "Acting");
+INSERT INTO hobbies (person, name) VALUES ("4", "Acting");
+INSERT INTO hobbies (person, name) VALUES ("5", "Acting");
+INSERT INTO hobbies (person, name) VALUES ("6", "Singing");
+INSERT INTO hobbies (person, name) VALUES ("7", "Singing");
+INSERT INTO hobbies (person, name) VALUES ("8", "Singing");
+INSERT INTO hobbies (person, name) VALUES ("9", "Acting");
+INSERT INTO hobbies (person, name) VALUES ("10", "Singing");
+INSERT INTO hobbies (person, name) VALUES ("11", "Singing");
+INSERT INTO hobbies (person, name) VALUES ("11", "Dancing");
+
+## Created a table that shows which celebrities are friends with other celebrities. Inserted data entries into the table.
+
+CREATE TABLE friends (id INTEGER PRIMARY KEY, person1_id TEXT, person2_id TEXT); 
+
+INSERT INTO friends (person1_id, person2_id) VALUES (1, 4); 
+INSERT INTO friends (person1_id, person2_id) VALUES (2, 5); 
+INSERT INTO friends (person1_id, person2_id) VALUES (2, 3); 
+INSERT INTO friends (person1_id, person2_id) VALUES (3, 7); 
+INSERT INTO friends (person1_id, person2_id) VALUES (3, 2); 
+INSERT INTO friends (person1_id, person2_id) VALUES (3, 4); 
+INSERT INTO friends (person1_id, person2_id) VALUES (4, 6); 
+INSERT INTO friends (person1_id, person2_id) VALUES (4, 3); 
+INSERT INTO friends (person1_id, person2_id) VALUES (4, 1);
+INSERT INTO friends (person1_id, person2_id) VALUES (5, 2); 
+INSERT INTO friends (person1_id, person2_id) VALUES (6, 4); 
+INSERT INTO friends (person1_id, person2_id) VALUES (7, 3); 
+INSERT INTO friends (person1_id, person2_id) VALUES (8, 9); 
+INSERT INTO friends (person1_id, person2_id) VALUES (9, 8); 
+INSERT INTO friends (person1_id, person2_id) VALUES (10, 11); 
+INSERT INTO friends (person1_id, person2_id) VALUES (11, 12); 
+
+
+## Observed the hobbies of each celebrity by joining two tables (famous_people and hobbies) 
+SELECT famous_people.fullname, hobbies.name FROM famous_people 
+LEFT OUTER JOIN hobbies 
+ON famous_people.fullname = hobbies.person_id;
+
+## Identified which celebrities were friends by doing a join of two tables (friends and famous_people) and self-joining the famous_people table
+SELECT a.fullname, b.fullname FROM friends 
+JOIN famous_people a 
+ON a.id = friends.person1_id
+JOIN famous_people b 
+ON b.id = friends.person2_id; 
+
+## Identified which celebrities had the most number of friends by joining two tables and using an aggregate function. 
+SELECT famous_people.fullname, COUNT(friends.person2_id) as number_of_friends FROM friends 
+    JOIN famous_people a 
+    ON a.id = friends.person1_id 
+GROUP BY a.fullname
+ORDER BY number_of_friends DESC 
+
