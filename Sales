@@ -8,33 +8,48 @@ WHERE length(orderID) = 6
 AND orderID <> "Order ID";
 
 
--- The number of orders in January that were for an iPhone 
-SELECT count(orderID)
+-- 1. How many orders were placed in January?
+SELECT COUNT(*) 
 FROM BIT_DB.JanSales
-WHERE Product = "iPhone"
-AND length(orderid) = 6 
-AND orderid <> 'Order ID'
+WHERE orderID <> 'Order ID' 
+AND length(orderID) = 6; 
 
--- Selecting the customer account number for all February orders 
-SELECT distinct customers.acctnum
-FROM BIT_DB.FebSales
-INNER JOIN BIT_DB.customers 
-ON customers.order_id = FebSales.orderID
-WHERE length(orderid) = 6 
-AND orderid <> 'Order ID'
+-- 2. How many of those orders were for an iPhone? 
+SELECT COUNT(*)
+FROM BIT_DB.JanSales
+WHERE Product = 'iPhone' 
+AND orderID <> 'Order ID' 
+AND length(orderID) = 6;
 
--- Selecting the cheapest product sold in January and its price 
+-- 3. Select the customer account numbers for all the orders that were placed in February. 
+SELECT distinct customers.acctnum 
+FROM BIT_DB.customers customers
+JOIN BIT_DB.FebSales Feb
+ON customers.order_id = Feb.orderID
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'; 
+
+-- 4. Which product was the cheapest one sold in January, and what was the price?
 SELECT distinct Product, Price
-FROM BIT_DB.JanSales
-ORDER BY price 
-LIMIT 1
+FROM BIT_DB.JanSales 
+ORDER BY Price 
+LIMIT 1;
 
--- The total revenue for each product sold in January 
-SELECT Product, sum(Quantity*Price) as Revenue
-FROM BIT_DB.JanSales
-GROUP BY Product
+-- 5. What is the total revenue for each product sold in January?
+SELECT Product
+, SUM(Quantity)*Price as Revenue 
+FROM BIT_DB.JanSales 
+GROUP BY Product; 
 
--- Which locations in New York received at least 3 orders in January, and how many orders did they each receive?
+-- 6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+SELECT Product
+, SUM(Quantity), SUM(Quantity)*Price as Revenue 
+FROM BIT_DB.FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY Product; 
+
+
+-- 7. Which locations in New York received at least 3 orders in January, and how many orders did they each receive?
 SELECT location, count(orderID) 
 FROM Bit_DB.JanSales
 WHERE location like "%NY%"
@@ -43,24 +58,17 @@ AND orderid <> "Order ID"
 GROUP BY location
 HAVING count(orderID) > 2;
 
-## Selecting the products sold in February at 548 Lincoln St, Seattle, WA 98101, the number of those products that were sold, and the total revenue
-SELECT Product, 
-sum(Quantity),
-(sum(Quantity)*Price) as Revenue
-FROM BIT_DB.FebSales
-WHERE Location = "548 Lincoln St, Seattle, WA 98101"
-GROUP BY Product
 
-## The number of customers that ordered more than 2 products in February and their average spend 
-SELECT 
-count(distinct customers.acctnum), 
-avg(Quantity*Price) as "Average Spend"
-FROM BIT_DB.FebSales
-LEFT JOIN BIT_DB.customers
-ON customers.order_id = FebSales.orderID
-WHERE FebSales.Quantity > 2
+-- 7.How many customers ordered more than 2 products at a time, and what was the average amount spent for those customers? 
+SELECT COUNT(distinct Customers.acctnum), 
+AVG(Quantity*Price) as average_amount_spent
+FROM BIT_DB.FebSales Feb
+JOIN BIT_DB.customers Customers
+ON Customers.order_id = Feb.orderID
+WHERE Feb.Quantity > 2
 AND length(orderid) = 6 
-AND orderid <> 'Order ID'
+AND orderid <> 'Order ID';
+
 
 ## Selecting all products and how much of each product was bought by customers living in the Los Angeles area
 SELECT Product, SUM(quantity) 
