@@ -60,6 +60,7 @@ WITH Popularity_CTE AS (
     ) 
 
 SELECT artist_name
-, avg_popularity 'Top Star' AS tag
+, avg_popularity,
+'Top Star' AS 'Tag'
 FROM Popularity_CTE
 WHERE avg_popularity >= 90;  
