@@ -70,31 +70,35 @@ INSERT INTO BIT_DB.CityBikeLanes values(58,2011, 2021, "Beaver", 3.5, 2.5, "no")
 INSERT INTO BIT_DB.CityBikeLanes values(59,2008, 2021,"Kensington",4,4.9,"yes");
 INSERT INTO BIT_DB.CityBikeLanes values(60,2002, 2021,"Mouse",4.5,4.3,"no");
 
-
--- Selecting the bike lanes that have an average rating of 4 or over and relabeling them
-
+-- 0. Exploring data 
 SELECT * 
 FROM BIT_DB.CityBikeLanes
 LIMIT 10;
 
+-- 1. Selecting all streets that are called Walnut
 SELECT *
 FROM CityBikeLanes WHERE street = "Walnut";
 
-WITH safe_bikes AS (
+
+-- 2. Selecting the bike lanes (i.e., streets) that have an average rating of 4 or over and giving them a label
+
+WITH CTE_safe_bikes AS (
     SELECT street,
-    AVG(b.safetyrating) AS average_safetyrating 
-    FROM CityBikeLanes b
+    AVG(B.safetyrating) AS average_safetyrating 
+    FROM CityBikeLanes B
     GROUP BY street
     )
 SELECT street, 
     average_safetyrating,
     "Safe Lane" as label
-FROM safe_bikes 
+FROM CTE_safe_bikes 
 WHERE average_safetyrating >=4;
 
--- (Using window functions) Recommending which streets to be improved, removed, or left as in based on average safety rating.
+-- 3. Recommending which streets to be improved, removed, or left as in based on average safety rating
+-- Using a CASE function and a window function
+
 SELECT street, safetyrating,
-AVG(safetyrating) OVER (PARTITION BY street) as "Average_safety_rating",
+AVG(safetyrating) OVER (PARTITION BY street) AS "Average_safety_rating",
 CASE
     WHEN AVG(safetyrating) OVER(PARTITION BY street) >= 4 THEN  "Leave As-Is"
     WHEN AVG(safetyrating) OVER(PARTITION BY street) < 2.5 THEN "Remove"
