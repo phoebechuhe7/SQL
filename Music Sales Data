@@ -1,0 +1,110 @@
+-- In this SQL, I'm querying a database with multiple tables in it in to discover more about the employees, sales, and customers. 
+
+
+-- 1. Show customers only from the USA
+SELECT * FROM customers
+WHERE Country = 'USA';
+
+-- 2. Determine which employees are sales agents
+SELECT * FROM employees 
+WHERE Title LIKE '%Sales%';
+
+-- 3. How many distinct billing countries are there from Invoice table? 
+SELECT 
+DISTINCT BillingCountry 
+FROM invoices;
+
+-- 4. What were the total sales from 2009?
+SELECT SUM(Total) as total_sales
+FROM invoices
+WHERE invoicedate LIKE "%2009%";
+
+-- 5. Show total sales made by each sales agent 
+SELECT 
+E.EmployeeID, 
+E.LastName, 
+E.FirstName, 
+COUNT(E.EmployeeID) AS total_sales
+FROM chinook.employees E
+JOIN chinook.customers C
+    ON C.SupportRepId = E.EmployeeId
+JOIN chinook.invoices I 
+    ON I.CustomerId = C.CustomerId
+GROUP BY E.EmployeeID;
+
+-- 6. Show customers from Germany, their emails, and their sales agent(s)
+SELECT 
+DISTINCT C.CustomerId, 
+C.Email, 
+I.Billingcountry, 
+E.EmployeeID
+FROM customers C
+JOIN invoices I 
+    ON C.CustomerId = I.CustomerId
+JOIN employees E
+    ON C.SupportRepId = E.EmployeeId
+WHERE I.BillingCountry = 'Germany';
+
+
+-- 7. Which sales agent made the most in 2009? 
+SELECT 
+E.EmployeeID, 
+E.LastName, 
+E.FirstName, 
+SUM(I.total) AS total_sales_amount
+FROM chinook.employees E
+JOIN chinook.customers C
+    ON C.SupportRepId = E.EmployeeId
+JOIN chinook.invoices I 
+    ON I.CustomerId = C.CustomerId
+WHERE I.InvoiceDate LIKE '%2009%'
+GROUP BY E.EmployeeID
+ORDER BY total_sales_amount DESC 
+    LIMIT 1;
+
+
+-- 8. Which customer spent the most in 2009? 
+
+SELECT 
+customers.CustomerId, 
+SUM(invoices.Total) AS total_annual_spend 
+FROM customers 
+JOIN invoices 
+    ON invoices.CustomerId = customers.CustomerId
+WHERE InvoiceDate LIKE "%2009%"
+GROUP BY invoices.CustomerId
+ORDER BY total_annual_spend DESC 
+    LIMIT 10;
+
+
+--9. What was the average money spent by customers in 2009? 
+SELECT 
+SUM(Total)/COUNT (DISTINCT(CustomerId)) AS average_money_spent 
+FROM invoices
+WHERE InvoiceDate LIKE "%2009%";
+
+
+-- 10. Which track was sold the most? 
+SELECT 
+   tracks.TrackId, 
+   tracks.name, 
+   SUM(invoice_items.InvoiceId) AS total_sold
+FROM tracks 
+INNER JOIN invoice_items 
+    ON invoice_items.TrackId = tracks.TrackId
+GROUP BY tracks.TrackId
+ORDER BY total_sold DESC 
+    LIMIT 1;
+
+-- 11. How many times were each type of genre sold in 2010
+SELECT
+DISTINCT genres.Name, COUNT(DISTINCT genres.Name)
+FROM chinook.genres
+JOIN chinook.tracks
+    ON tracks.GenreId = genres.GenreId
+JOIN chinook.invoice_items
+    ON invoice_items.TrackId = tracks.TrackId
+JOIN chinook.invoices
+    ON invoices.InvoiceId = invoice_items.InvoiceId
+WHERE invoices.InvoiceDate LIKE "%2010%"
+GROUP BY genres.Name;
