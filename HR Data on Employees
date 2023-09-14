@@ -1,0 +1,93 @@
+-- In this SQL, I'm querying a database with to better understand and answer potential questions that a manager might ask about the employees. 
+
+-- 0. Initial exploration of data
+SELECT * FROM Employees
+LIMIT 10;
+
+
+-- 1. Identifying which education major most employees have 
+SELECT 
+    Distinct Educationfield EducationMajors
+    ,COUNT(Gender) Count
+FROM Employees 
+GROUP BY EducationMajors
+ORDER BY Count DESC
+LIMIT 1;
+
+-- 2. Identifying the number of male vs female employees in each job role  
+SELECT 
+    Gender
+    , JobRole
+    , COUNT(JobRole)
+FROM Employees 
+GROUP BY JobRole, Gender
+ORDER BY JobRole, Gender DESC;
+
+
+-- 3. Identifying key features of female vs male employees 
+SELECT 
+    Gender
+    , (AVG(Age))
+    , AVG(YearsAtCompany)
+    , AVG(YearsSinceLastPromotion)
+    , ROUND(AVG(MonthlyIncome))
+FROM Employees
+GROUP BY Gender;
+
+-- 4. Exemining whether there is a trend between the number of years worked in a company and the income
+-- Note the cast function because the entries were processed as a word rather than an integer 
+SELECT 
+    YearsAtCompany
+    , AVG(MonthlyIncome)
+FROM Employees
+GROUP BY YearsAtCompany
+ORDER BY CAST(YearsAtCompany as int) DESC
+;
+
+-- 5. Identifying the highest earing research director, their work history, and their monthly incomes. 
+SELECT 
+    EmployeeNumber
+    , YearsAtCompany
+    , YearsInCurrentRole
+    , MonthlyIncome
+FROM Employees
+    WHERE JobRole = "Research Director" 
+ORDER BY CAST(MonthlyIncome as int) DESC
+LIMIT 1
+;
+-- 6. Identifying the highest earning job roles
+WITH HourlyRate_By_Jobs_CTE AS 
+    (SELECT JobRole
+        , AVG(HourlyRate) AS average_hourly_rate
+    FROM Employees e
+    GROUP BY JobRole) 
+SELECT 
+    JobRole 
+    , average_hourly_rate
+    , 'Highest Earners' AS Tag
+FROM HourlyRate_By_Jobs_CTE
+WHERE average_hourly_rate >= 65
+ORDER BY average_hourly_rate DESC
+;
+
+
+-- 7. Identifying which job role(s) have an average satisfaction rate over 2.75
+SELECT 
+    JobRole
+    , AVG(JobSatisfaction) average_job_satisfaction
+FROM Employees
+GROUP BY JobRole
+HAVING average_job_satisfaction >=2.75;
+
+
+-- 8. Identifying and labeling each job role on whether they need improvement based on employees' average satisfaction ratings
+SELECT 
+    JobRole
+    , AVG(JobSatisfaction) average_job_satisfaction
+    , CASE 
+        WHEN AVG(JobSatisfaction) > 2.75 THEN 'No improvements needed' 
+        WHEN AVG(JobSatisfaction) > 2.65 THEN 'Minor improvements needed' 
+        ELSE 'Improvement needed'
+    END AS SatisfactionRatings
+FROM Employees
+GROUP BY JobRole;
