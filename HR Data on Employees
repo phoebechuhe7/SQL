@@ -1,4 +1,5 @@
 -- In this SQL, I'm querying a database with to better understand and answer potential questions that a manager might ask about the employees. 
+-- Data from https://www.kaggle.com/datasets/shivaiyer129/hr-data-analytics
 
 -- 0. Initial exploration of data
 SELECT * FROM Employees
