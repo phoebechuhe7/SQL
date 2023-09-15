@@ -1,0 +1,81 @@
+
+
+-- 0. Initial exploration of data
+SELECT * FROM VGSales
+LIMIT 20;
+
+-- 1. Identifying the total amount of sales each video game publisher has had in the 21st century
+SELECT 
+    Publisher
+    , SUM(NA_Sales) total_NA_sales
+FROM VGSales
+WHERE Year >= 2000
+GROUP BY Publisher
+ORDER BY total_NA_sales DESC;
+
+-- 2. Identifying the games that was sold the most globally in 2006
+SELECT 
+    Name
+    , Rank
+    , Year
+    , Genre
+    , global_sales
+    , Publisher 
+FROM VGSales 
+WHERE Year = '2006'
+GROUP BY Name 
+ORDER BY global_sales DESC
+LIMIT 1;
+
+-- 3. Identifying how much of each genre of games are sold in NA, EU, JP, and globally in the year 2012
+SELECT 
+    Genre
+    , SUM(NA_Sales) 
+    , SUM(EU_Sales) 
+    , SUM(JP_Sales)
+    , SUM(Global_Sales)
+FROM VGSales
+WHERE Year = '2012'
+GROUP BY Genre
+ORDER BY SUM(Global_Sales) DESC;
+
+-- 4. Identify Wii games that were sold the most in the EU and NA 
+SELECT 
+    Name
+    , Rank
+    , Genre 
+    , Year
+    , EU_Sales + NA_Sales AS EU_NA_Sales
+FROM VGSales 
+WHERE Name LIKE 'Wii%' and EU_NA_Sales > 10
+GROUP BY Name
+ORDER BY EU_NA_Sales DESC;
+
+-- 5. Identify which game produced by Activision has made the most sales globally
+SELECT 
+    Name
+    , Global_Sales
+FROM VGSales
+WHERE Publisher = 'Activision'
+GROUP BY Name
+ORDER BY cast(Global_Sales as INT) DESC
+LIMIT 10;
+
+-- 6. Identifying how many games are in each genre 
+SELECT 
+    Genre 
+    , COUNT(Name)
+FROM VGSales
+GROUP BY Genre;
+
+-- 7. Identifying which games in 2009-2013 made the most global sales
+SELECT 
+    Name
+    , Publisher
+    , Genre 
+    , Global_sales 
+    , Year
+FROM VGSales 
+WHERE Year BETWEEN 2009 AND 2013
+ORDER BY Global_sales DESC
+LIMIT 5
