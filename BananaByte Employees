@@ -1,5 +1,6 @@
 -- In this project, I use SQL to answer potential questions a manager may have regarding the employees at BananaBytes
 -- Data from https://www.kaggle.com/datasets/bruiser0311/bananabyte-employee-salary
+-- Tableau dashboard using this dataset: https://public.tableau.com/app/profile/phoebe.he4392/viz/BananaByteEmployeeDemographicsAnalysis/Dashboard1?publish=yes
 
 -- 0. Initial exploration of the data 
 SELECT * FROM BananaByte
