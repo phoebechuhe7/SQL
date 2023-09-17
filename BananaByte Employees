@@ -1,0 +1,98 @@
+-- In this project, I use SQL to answer potential questions a manager may have regarding the employees at BananaBytes
+-- Data from https://www.kaggle.com/datasets/bruiser0311/bananabyte-employee-salary
+
+-- 0. Initial exploration of the data 
+SELECT * FROM BananaByte
+LIMIT 10
+;
+
+-- 1. Identifying the top 10 most well paid employee working in San Francisco and their statistics 
+SELECT 
+    Employee_ID 
+    , Years_Exp
+    , Years_Seniority
+    , Edu_Level 
+    , Total_Compensation
+    , Job_Location
+FROM BananaByte
+WHERE Job_location LIKE 'San Francisco%'
+GROUP BY Employee_ID
+ORDER BY Salary DESC
+LIMIT 10
+;
+
+-- 2. Identify employees' average overall compensation and average compensation by location and role 
+SELECT 
+    Job_Role
+    , AVG(total_compensation) OVER (PARTITION BY Job_Role) AS 'Role Average'
+    , Job_Location
+    , AVG(total_compensation) OVER (PARTITION BY Job_Location) AS 'Location Average'
+    , AVG(total_compensation) OVER() AS 'Overall Average'
+FROM BananaByte
+;
+
+
+-- 3. Identify salary brackets of the job roles
+SELECT 
+    Job_Role
+    , AVG(total_compensation) AS Average_total_compensation
+    , CASE
+        WHEN AVG(total_compensation) OVER(PARTITION BY Job_Role) >= 100000 THEN  "Over $100,000"
+        WHEN AVG(total_compensation) OVER(PARTITION BY Job_Role) >= 75000 THEN  "Over $75,000"
+        ELSE "Under $75,000"
+        END AS "Summary"
+FROM BananaByte
+GROUP BY Job_Role
+;
+
+-- 4. Identify the female employees at the company whose years of experience is greaterthan the employee average
+SELECT 
+    Employee_ID
+    , Years_Exp
+FROM BananaByte
+    WHERE Years_Exp > (
+        SELECT 
+    AVG(Years_Exp)
+    FROM BananaByte 
+        WHERE Gender = 'Female')
+;
+
+
+-- 5. Identify job roles in the company where the average years of experience is greater than 20 
+SELECT 
+    Job_role
+    , COUNT(Job_Role) 
+    , AVG(Years_Exp)
+FROM BananaByte
+GROUP BY Job_Role
+HAVING AVG(Years_Exp) > 20
+ORDER BY AVG(Years_Exp) DESC
+;
+
+-- 6. Identifying the statistics of each job family 
+SELECT 
+     Job_Family 
+     , COUNT(Job_Family) Number_of_employees
+     , AVG(Salary) Average_salary
+     , AVG(Bonus_FY) Average_bonus
+FROM BananaByte
+GROUP BY job_family;
+;
+
+-- 7. Identifying employees who need their performance ratings to be updated 
+SELECT
+   *
+FROM BananaByte
+WHERE Perf = ''
+;
+
+-- 8. Identifying each job_roles best performing employees (to give a raise to)
+-- Filtering out employees whose performance ratings need to be updated  
+SELECT 
+    Job_Role
+    , Employee_ID 
+    , MAX(Perf) AS Performance 
+FROM BananaByte
+    WHERE Perf <> ''
+GROUP BY Job_Role
+;
