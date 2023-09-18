@@ -70,7 +70,7 @@ HAVING AVG(Years_Exp) > 20
 ORDER BY AVG(Years_Exp) DESC
 ;
 
--- 6. Identifying the statistics of each job family 
+-- 6. Identifying the features of each job family 
 SELECT 
      Job_Family 
      , COUNT(Job_Family) Number_of_employees
