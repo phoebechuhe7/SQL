@@ -7,7 +7,7 @@ SELECT * FROM BananaByte
 LIMIT 10
 ;
 
--- 1. Identifying the top 10 most well paid employee working in San Francisco and their statistics 
+-- 1. Identifying the top 10 most well paid employees working in San Francisco and their statistics 
 SELECT 
     Employee_ID 
     , Years_Exp
