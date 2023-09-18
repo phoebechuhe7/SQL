@@ -46,7 +46,7 @@ FROM BananaByte
 GROUP BY Job_Role
 ;
 
--- 4. Identify the female employees at the company whose years of experience is greaterthan the employee average
+-- 4. Identify the female employees at the company whose years of experience is greater than the employee average
 SELECT 
     Employee_ID
     , Years_Exp
